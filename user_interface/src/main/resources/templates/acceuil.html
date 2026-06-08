@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Accueil - Cartographie</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+          background-color: #212529;
+          color: #f8f9fa;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        header {
+          background-color: #1a1d20;
+          padding: 15px 30px;
+          border-bottom: 1px solid #343a40;
+        }
+        nav {
+          display: flex;
+          gap: 20px;
+        }
+        nav a {
+          color: #6c757d;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+        }
+        nav a.active, nav a:hover {
+          color: #2ee6c7;
+          background-color: #2c3034;
+        }
+        .container {
+          padding: 30px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .search-container {
+          margin-bottom: 20px;
+          display: flex;
+          gap: 10px;
+        }
+        .search-container input {
+          background-color: #2c3034;
+          border: 1px solid #495057;
+          color: #fff;
+          padding: 10px 15px;
+          border-radius: 6px;
+          font-size: 14px;
+          flex-grow: 1;
+        }
+        .search-container input:focus {
+          outline: none;
+          border-color: #2ee6c7;
+        }
+        .search-container button {
+          background-color: #2ee6c7;
+          color: #1a1d20;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+        .search-container button:hover {
+          background-color: #25bda4;
+        }
+        #map { 
+          height: 600px; 
+          border: 1px solid #495057;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        } 
+    </style>
+  </head>
+  <body>
+
+      <header>
+          <nav>
+              <a th:href="@{/acceuil}" class="active">Accueil</a>
+              <a th:href="@{/infrastructure}">Infrastructures</a>
+          </nav>
+      </header>
+
+      <div class="container">
+          <div class="search-container">
+              <input type="text" id="localisationInput" placeholder="Ex: Paris, France">
+              <button onclick="rechercherLieu()">Rechercher</button>
+          </div>
+
+          <div id="map"></div>
+      </div>
+        
+      <script th:inline="javascript">
+      /*<![CDATA[*/
+        var map = L.map('map').setView([48.8566, 2.3522], 3);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        L.circle([48.9561507, 2.341262599], {
+            color: '#dc3545',
+            fillColor: '#dc3545',
+            fillOpacity: 0.5,
+            radius: 50000
+        }).addTo(map)
+        .bindPopup('Sorbonne Paris Nord')
+        .openPopup();
+
+        function rechercherLieu() {
+            var lieu = document.getElementById('localisationInput').value;
+            if(!lieu) return;
+            
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(lieu), {
+                headers: { 'User-Agent': 'Starfish-Apprentis-BUT' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.length > 0) {
+                    var lat = parseFloat(data[0].lat);
+                    var lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map).bindPopup(lieu).openPopup();
+                }
+            })
+            .catch(err => console.error('Erreur recherche :', err));
+        }
+
+        fetch('/api/infrastructures')
+        .then(contenu => contenu.json())
+        .then(data => {
+          data.forEach((infra) => {
+            if (infra.latitude && infra.longitude) {
+              L.circle([infra.latitude, infra.longitude], {
+                  color: '#2ee6c7',
+                  fillColor: '#2ee6c7',
+                  fillOpacity: 0.4,
+                  radius: 60000
+              }).addTo(map)
+                .bindPopup(`<b>${infra.localisation}</b><br>Type : ${infra.type}<br>Nombre : ${infra.nombre}`);
+            }
+          });
+        })
+        .catch(err => console.error('Erreur données carte :', err));
+     /*]]>*/
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+target/
+*.class
+*.jar
+*.war
+*.ear
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+.DS_Store
+user_interface/data/data.txt
+user_interface/Data/data.txt

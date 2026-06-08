@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user_interface
+  profiles:
+    active: dev
+  web:
+    resources:
+      static-locations:
+        - "classpath:/static/"
+        - "file:./Data/"

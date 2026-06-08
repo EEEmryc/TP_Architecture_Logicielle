@@ -1,0 +1,41 @@
+#contenu {
+	font-family: "Comic Sans MS", cursive;
+	color: black;
+  margin: 1px;
+}
+header {
+  width: 99%;
+  height: 52px;
+  padding: 4px;
+  margin: 2px;
+}
+section {
+  float: left;
+  width: 99%;
+  height:99%;
+  padding: 4px;
+  margin: 4px;
+}
+iframe {
+  width:99%;
+  height:97%;
+  padding: 2px;
+  margin: 2px;
+}
+
+footer p {
+  text-align: justify;
+  margin: 4px;
+}
+
+footer {
+  float: left;
+  width: 99%;
+  height: 52px;
+  font-size: 12px;
+  font-style: italic;
+  background-color: #86C9D5; 
+  padding: 4px;
+  border: 2px solid black;
+}
+

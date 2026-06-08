@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Infrastructures</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <style>
+        body {
+          background-color: #212529;
+          color: #f8f9fa;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        header {
+          background-color: #1a1d20;
+          padding: 15px 30px;
+          border-bottom: 1px solid #343a40;
+        }
+        nav {
+          display: flex;
+          gap: 20px;
+        }
+        nav a {
+          color: #6c757d;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+        }
+        nav a.active, nav a:hover {
+          color: #2ee6c7;
+          background-color: #2c3034;
+        }
+        .container {
+          padding: 30px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        h1, h2 {
+          color: #fff;
+          font-weight: 400;
+          margin-bottom: 20px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #2c3034;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          margin-bottom: 40px;
+        }
+        th, td {
+          padding: 12px 15px;
+          text-align: left;
+          vertical-align: middle;
+        }
+        th {
+          background-color: #1a1d20;
+          color: #2ee6c7;
+          font-weight: 600;
+          border-bottom: 1px solid #495057;
+        }
+        td {
+          border-bottom: 1px solid #343a40;
+          color: #e9ecef;
+        }
+        tr:last-child td {
+          border-bottom: none;
+        }
+        .btn-delete {
+          background-color: #dc3545;
+          color: white;
+          border: none;
+          width: 24px;
+          height: 24px;
+          border-radius: 4px;
+          font-weight: bold;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          font-size: 14px;
+          transition: background-color 0.2s ease;
+        }
+        .btn-delete:hover {
+          background-color: #bd2130;
+        }
+        .form-container {
+          background-color: #2c3034;
+          padding: 25px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          border: 1px solid #495057;
+        }
+        .form-group {
+          margin-bottom: 15px;
+        }
+        .form-group label {
+          display: block;
+          margin-bottom: 5px;
+          color: #adb5bd;
+          font-size: 14px;
+        }
+        .form-group input, .form-group select {
+          width: 100%;
+          box-sizing: border-box;
+          background-color: #1a1d20;
+          border: 1px solid #495057;
+          color: #fff;
+          padding: 10px;
+          border-radius: 6px;
+          font-size: 14px;
+        }
+        .form-group input:focus, .form-group select:focus {
+          outline: none;
+          border-color: #2ee6c7;
+        }
+        button.btn-submit {
+          background-color: #2ee6c7;
+          color: #1a1d20;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.2s ease;
+        }
+        button.btn-submit:hover {
+          background-color: #25bda4;
+        }
+
+        /* Boîte de dialogue modale personnalisée */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.6);
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+        .modal-box {
+          background-color: #2c3034;
+          border: 1px solid #495057;
+          padding: 25px;
+          border-radius: 8px;
+          width: 400px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+          text-align: center;
+        }
+        .modal-box p {
+          color: #e9ecef;
+          margin-bottom: 25px;
+          font-size: 15px;
+        }
+        .modal-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+        }
+        .btn-modal-confirm {
+          background-color: #dc3545;
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .btn-modal-confirm:hover {
+          background-color: #bd2130;
+        }
+        .btn-modal-cancel {
+          background-color: #495057;
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .btn-modal-cancel:hover {
+          background-color: #6c757d;
+        }
+    </style>
+  </head>
+  <body>
+
+    <header>
+        <nav>
+            <a th:href="@{/acceuil}">Accueil</a>
+            <a th:href="@{/infrastructure}" class="active">Infrastructures</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Liste des Infrastructures</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Localisation</th>
+                    <th>Type</th>
+                    <th>Portée</th>
+                    <th>Nombre</th>
+                    <th>Complément</th>
+                    <th>Mail</th>
+                    <th style="width: 50px; text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="infra : ${liste}">
+                    <td th:text="${infra.localisation}"></td>
+                    <td th:text="${infra.type}"></td>
+                    <td th:text="${infra.portee}"></td>
+                    <td th:text="${infra.nombre}"></td>
+                    <td th:text="${infra.complement}"></td>
+                    <td th:text="${infra.mail}"></td>
+                    <td style="text-align: center;">
+                        <button class="btn-delete" th:data-loc="${infra.localisation}" onclick="ouvrirModal(this.getAttribute('data-loc'))">—</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Ajouter une Infrastructure</h2>
+        <div class="form-container">
+            <form th:action="@{/ajouter}" th:object="${infrastructure}" method="get">
+                <div class="form-group">
+                    <label>Localisation</label>
+                    <input type="text" th:field="*{localisation}" required placeholder="Ex: France Paris ou Argentine Buenos Aires">
+                </div>
+                <div class="form-group">
+                    <label>Type d'infrastructure</label>
+                    <select th:field="*{type}">
+                        <option value="Data Center">Data Center</option>
+                        <option value="Cloud">Cloud</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Portée</label>
+                    <select th:field="*{portee}">
+                        <option value="National">National</option>
+                        <option value="Local">Local</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" th:field="*{nombre}" required placeholder="Ex: 12">
+                </div>
+                <div class="form-group">
+                    <label>Complément d'information</label>
+                    <input type="text" th:field="*{complement}" placeholder="Ex: Capitale">
+                </div>
+                <button type="submit" class="btn-submit">Ajouter l'infrastructure</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-box">
+            <p id="modalMessage">Voulez-vous vraiment supprimer cette infrastructure ?</p>
+            <div class="modal-buttons">
+                <button class="btn-modal-confirm" onclick="confirmerSuppression()">Supprimer</button>
+                <button class="btn-modal-cancel" onclick="fermerModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        var localisationASupprimer = "";
+
+        function ouvrirModal(localisation) {
+            localisationASupprimer = localisation;
+            document.getElementById('modalMessage').innerText = "Voulez-vous vraiment supprimer l'infrastructure à " + localisation + " ?";
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function fermerModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            localisationASupprimer = "";
+        }
+
+        function confirmerSuppression() {
+            if (localisationASupprimer) {
+                window.location.href = "/supprimer?localisation=" + encodeURIComponent(localisationASupprimer);
+            }
+        }
+    </script>
+  </body>
+</html>
