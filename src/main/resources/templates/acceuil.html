@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Accueil - Cartographie</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+          background-color: #212529;
+          color: #f8f9fa;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        header {
+          background-color: #1a1d20;
+          padding: 15px 30px;
+          border-bottom: 1px solid #343a40;
+        }
+        nav {
+          display: flex;
+          gap: 20px;
+        }
+        nav a {
+          color: #6c757d;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+        }
+        nav a.active, nav a:hover {
+          color: #2ee6c7;
+          background-color: #2c3034;
+        }
+        .container {
+          padding: 30px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .search-container {
+          margin-bottom: 20px;
+          display: flex;
+          gap: 10px;
+        }
+        .search-container input {
+          background-color: #2c3034;
+          border: 1px solid #495057;
+          color: #fff;
+          padding: 10px 15px;
+          border-radius: 6px;
+          font-size: 14px;
+          flex-grow: 1;
+        }
+        .search-container input:focus {
+          outline: none;
+          border-color: #2ee6c7;
+        }
+        .search-container button {
+          background-color: #2ee6c7;
+          color: #1a1d20;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+        .search-container button:hover {
+          background-color: #25bda4;
+        }
+        #map { 
+          height: 600px; 
+          border: 1px solid #495057;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        } 
+    </style>
+  </head>
+  <body>
+
+      <header>
+          <nav>
+              <a th:href="@{/acceuil}" class="active">Accueil</a>
+              <a th:href="@{/infrastructure}">Infrastructures</a>
+          </nav>
+      </header>
+
+      <div class="container">
+          <div class="search-container">
+              <input type="text" id="localisationInput" placeholder="Ex: Paris, France">
+              <button onclick="rechercherLieu()">Rechercher</button>
+          </div>
+
+          <div id="map"></div>
+      </div>
+        
+      <script th:inline="javascript">
+      /*<![CDATA[*/
+        // Activation du worldCopyJump pour repositionner automatiquement les calques lors du défilement infini
+        var map = L.map('map', { worldCopyJump: true }).setView([48.8566, 2.3522], 3);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var dataInfrastructures = [];
+        var calquesActifs = [];
+        var villesEclatees = new Set();
+
+        function nettoyerCalques() {
+            calquesActifs.forEach(calque => map.removeLayer(calque));
+            calquesActifs = [];
+        }
+
+        function afficherInfrastructures() {
+            nettoyerCalques();
+            var zoomActuel = map.getZoom();
+            
+            // Définition des décalages de longitude pour couvrir le monde central, le monde de gauche et le monde de droite
+            var mondeOffsets = [-360, 0, 360];
+
+            dataInfrastructures.forEach(infra => {
+                if (!infra.latitude || !infra.longitude) return;
+
+                var typeMin = infra.type.toLowerCase();
+                var estMixte = typeMin.includes('data center') && typeMin.includes('cloud');
+                var nomVille = infra.localisation;
+
+                mondeOffsets.forEach(offset => {
+                    var lngAjustee = infra.longitude + offset;
+
+                    if (estMixte && (villesEclatees.has(nomVille) || zoomActuel >= 9)) {
+                        var dcValeur = "N/A";
+                        var clValeur = "N/A";
+                        var segments = infra.nombre.split(",");
+                        
+                        segments.forEach(seg => {
+                            var net = seg.trim();
+                            if (net.startsWith("d")) dcValeur = net;
+                            if (net.startsWith("cl")) clValeur = net;
+                        });
+
+                        var decalageLongitude = 0.35; 
+
+                        var cercleDC = L.circle([infra.latitude, lngAjustee - decalageLongitude], {
+                            color: '#2ee6c7',
+                            fillColor: '#2ee6c7',
+                            fillOpacity: 0.6,
+                            radius: 35000
+                        }).addTo(map)
+                          .bindPopup(`<b>${infra.localisation}</b><br>Nature : Data Center<br>Volume : ${dcValeur}`);
+
+                        var cercleCL = L.circle([infra.latitude, lngAjustee + decalageLongitude], {
+                            color: '#4ade80',
+                            fillColor: '#4ade80',
+                            fillOpacity: 0.6,
+                            radius: 35000
+                        }).addTo(map)
+                          .bindPopup(`<b>${infra.localisation}</b><br>Nature : Cloud<br>Volume : ${clValeur}`);
+
+                        calquesActifs.push(cercleDC);
+                        calquesActifs.push(cercleCL);
+                    } 
+                    else {
+                        var couleurConfig = '#2ee6c7'; 
+                        if (estMixte) {
+                            couleurConfig = '#ff9f43';
+                        } else if (typeMin.includes('cloud')) {
+                            couleurConfig = '#4ade80';
+                        }
+
+                        var cercleUnique = L.circle([infra.latitude, lngAjustee], {
+                            color: couleurConfig,
+                            fillColor: couleurConfig,
+                            fillOpacity: 0.4,
+                            radius: 60000
+                        }).addTo(map)
+                          .bindPopup(`<b>${infra.localisation}</b><br>Type : ${infra.type}<br>Nombre : ${infra.nombre}`);
+
+                        if (estMixte) {
+                            cercleUnique.on('click', function() {
+                                villesEclatees.add(nomVille);
+                                map.setView([infra.latitude, lngAjustee], 9);
+                                afficherInfrastructures();
+                            });
+                        }
+
+                        calquesActifs.push(cercleUnique);
+                    }
+                });
+            });
+        }
+
+        map.on('zoomend', function() {
+            if (map.getZoom() < 9) {
+                villesEclatees.clear();
+            }
+            afficherInfrastructures();
+        });
+
+        function rechercherLieu() {
+            var lieu = document.getElementById('localisationInput').value;
+            if(!lieu) return;
+            
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(lieu), {
+                headers: { 'User-Agent': 'Starfish-Apprentis-BUT' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.length > 0) {
+                    var lat = parseFloat(data[0].lat);
+                    var lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map).bindPopup(lieu).openPopup();
+                }
+            })
+            .catch(err => console.error('Erreur recherche : ', err));
+        }
+
+        fetch('/api/infrastructures')
+        .then(contenu => contenu.json())
+        .then(data => {
+            dataInfrastructures = data;
+            afficherInfrastructures();
+        })
+        .catch(err => console.error('Erreur données carte : ', err));
+     /*]]>*/
+    </script>
+  </body>
+</html>

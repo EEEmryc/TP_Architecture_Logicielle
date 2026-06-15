@@ -1,0 +1,31 @@
+France ➔ Paris,Data Center / Cloud,National / Local,dn=162, cll=45,Capitale FLAP,paris@mail.com,48.8566,2.3522
+France ➔ Lyon,Data Center,Local,dl=15,Zone Auvergne-Rhône-Alpes,lyon@mail.com,45.764,4.8357
+France ➔ Bordeaux,Data Center,Local,dl=13,Zone Nouvelle-Aquitaine,bordeaux@mail.com,44.8378,-0.5792
+France ➔ Strasbourg,Data Center / Cloud,Local,dl=10, cll=12,Hub Est Européen,strasbourg@mail.com,48.5734,7.7521
+France ➔ Marseille,Data Center / Cloud,Local,dl=28, cll=15,Hub Méditerranée Intercontinental,marseille@mail.com,43.2965,5.3698
+États-Unis ➔ New York,Data Center / Cloud,Local,dl=52, cll=38,Hub Côte Est USA,new_york@mail.com,40.7128,-74.006
+États-Unis ➔ Ashburn,Data Center / Cloud,National / Local,dn=125, cln=80,Data Center Alley Virginia,ashburn@mail.com,39.0438,-77.4875
+États-Unis ➔ Los Angeles,Data Center / Cloud,Local,dl=42, cll=25,Zone Pacifique USA,los_angeles@mail.com,34.0522,-118.2437
+États-Unis ➔ Chicago,Data Center,Local,dl=35,Hub Central USA,chicago@mail.com,41.8781,-87.6298
+Royaume-Uni ➔ Londres,Data Center / Cloud,National / Local,dn=88, cll=50,Hub Majeur Europe FLAP,londres@mail.com,51.5074,-0.1278
+Allemagne ➔ Francfort,Data Center / Cloud,National / Local,dn=94, cll=62,Hub Financier DE-CIX FLAP,francfort@mail.com,50.1109,8.6821
+Pays-Bas ➔ Amsterdam,Data Center / Cloud,National / Local,dn=64, cll=40,Hub Connectivité AMS-IX FLAP,amsterdam@mail.com,52.3676,4.9041
+Japon ➔ Tokyo,Data Center / Cloud,National / Local,dn=72, cll=48,Hub Asie de l'Est,tokyo@mail.com,35.6762,139.6503
+Singapour ➔ Singapour,Data Center / Cloud,National / Local,dn=46, cll=35,Cité-État Stratégique,singapour@mail.com,1.3521,103.8198
+Australie ➔ Sydney,Data Center / Cloud,National / Local,dn=38, cll=22,Zone Océanie Pacifique,sydney@mail.com,-33.8688,151.2093
+Brésil ➔ São Paulo,Data Center / Cloud,National / Local,dn=32, cll=18,Hub Amérique du Sud,sao_paulo@mail.com,-23.5505,-46.6333
+Canada ➔ Toronto,Data Center,National,dn=25,Zone Economique Ontario,toronto@mail.com,43.6532,-79.3832
+Irlande ➔ Dublin,Data Center / Cloud,National / Local,dn=44, cll=30,Hub Hyperscale Européen,dublin@mail.com,53.3498,-6.2603
+Émirats arabes unis ➔ Dubaï,Data Center / Cloud,National / Local,dn=18, cll=15,Hub Émergent Moyen-Orient,dubai@mail.com,25.2048,55.2708
+Afrique du Sud ➔ Johannesburg,Data Center,National,dn=14,Hub Afrique Australe,johannesburg@mail.com,-26.2041,28.0473
+Espagne ➔ Madrid,Data Center / Cloud,National / Local,dn=22, cll=14,Hub Péninsule Ibérique,madrid@mail.com,40.4167,-3.7038
+Italie ➔ Milan,Data Center,National,dn=19,Zone Industrielle Lombardie,milan@mail.com,45.4642,9.19
+Chine ➔ Shanghai,Cloud,National,cln=65,Hub Économique Chine,shanghai@mail.com,31.2304,121.4737
+Chine ➔ Pékin,Data Center,National,dn=55,Capitale Politique Chine,pekin@mail.com,39.9042,116.4074
+Inde ➔ Mumbai,Data Center / Cloud,National / Local,dn=28, cll=24,Hub Principal Inde,mumbai@mail.com,19.076,72.8777
+Inde ➔ Bangalore,Cloud / Cloud,Cloud,Local,cll=36,Silicon Valley Indienne,bangalore@mail.com,12.9716,77.5946
+Corée du Sud ➔ Séoul,Data Center,National,dn=24,Zone Haute Connectivité,seoul@mail.com,37.5665,126.978
+Hong Kong ➔ Hong Kong,Data Center / Cloud,National / Local,dn=41, cll=20,Hub Connectivité Asie,hong_kong@mail.com,22.3193,114.1694
+Suisse ➔ Zurich,Data Center / Data Center,Data Center,Local / National,dl=18, cln=13,Zone Bancaire Sécurisée,zurich@mail.com,47.3769,8.5417
+Suède ➔ Stockholm,Data Center / Cloud,Local,dl=12, cll=15,Hub Nordique Scandi,stockholm@mail.com,59.3293,18.0686
+Tunisie ➔ Tunis,Data Center,Data Center,National,cln=1000,null,tunis@mail.com,36.8002068,10.1857757

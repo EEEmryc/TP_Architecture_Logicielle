@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Accès Interdit - Starfish</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <style>
+        body {
+          background-color: #212529;
+          color: #f8f9fa;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+        header {
+          background-color: #1a1d20;
+          padding: 15px 30px;
+          border-bottom: 1px solid #343a40;
+        }
+        nav {
+          display: flex;
+          gap: 20px;
+        }
+        nav a {
+          color: #6c757d;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+        }
+        nav a:hover {
+          color: #2ee6c7;
+          background-color: #2c3034;
+        }
+        .error-container {
+          flex-grow: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        .error-box {
+          background-color: #2c3034;
+          border: 1px solid #dc3545; /* Bordure rouge pour signaler l'erreur */
+          padding: 40px;
+          border-radius: 8px;
+          max-width: 500px;
+          width: 100%;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          text-align: center;
+        }
+        h1 {
+          color: #dc3545;
+          font-weight: 500;
+          margin-top: 0;
+          margin-bottom: 15px;
+          font-size: 28px;
+        }
+        h2 {
+          color: #adb5bd;
+          font-size: 14px;
+          font-weight: 400;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 25px;
+        }
+        p {
+          color: #e9ecef;
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 30px;
+        }
+        .btn-back {
+          background-color: #2ee6c7;
+          color: #1a1d20;
+          text-decoration: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          font-weight: bold;
+          font-size: 14px;
+          display: inline-block;
+          transition: background-color 0.2s ease;
+        }
+        .btn-back:hover {
+          background-color: #25bda4;
+        }
+    </style>
+  </head>
+  <body>
+
+    <header>
+        <nav>
+            <a th:href="@{/acceuil}">Accueil</a>
+            <a th:href="@{/infrastructure}">Infrastructures</a>
+        </nav>
+    </header>
+
+    <div class="error-container">
+        <div class="error-box">
+            <h2>Erreur <span th:text="${status}">403</span></h2>
+            <h1>Action Non Autorisée</h1>
+            
+            <p th:text="${message}">Action interdite : Seul l'ordinateur hôte est autorisé à modifier ou supprimer des infrastructures.</p>
+            
+            <a th:href="@{/infrastructure}" class="btn-back">Retour aux infrastructures</a>
+        </div>
+    </div>
+
+  </body>
+</html>

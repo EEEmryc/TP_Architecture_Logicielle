@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: user_interface
+  profiles:
+    active: deploiement 
+  web:
+    resources:
+      static-locations:
+        - "classpath:/static/"
+        - "file:./Data/"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev 
+server:
+  port: 8080
+  address: 127.0.0.1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test 
+  port: 8081
+  address: 127.0.0.1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploiement 
+server:
+  port: 8080
+  address: 0.0.0.0 
